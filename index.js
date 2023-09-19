@@ -4,13 +4,16 @@ let http = require('node:http')
 let server = http.createServer(app)
 let io = require('socket.io')(server)
 
+let oldMessages = []
+
 io.on("connection", socket => {
     socket.on("disconnect", () => {
         console.log(`O usuário ${socket.id} foi desconectado`)
     })
 
     socket.on("msg", data => {
-        socket.emit("showMsg", data)
+        oldMessages.push(data)
+        io.emit("showMsg", data)
     })
 })
 

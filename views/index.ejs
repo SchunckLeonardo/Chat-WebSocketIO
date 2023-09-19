@@ -5,34 +5,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Socket IO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
+
+<style>
+    #chat {
+        background-color: #ADD8E6;
+        min-height: 500px;
+        max-height: 500px;
+        overflow-y: scroll;
+        padding: 25px;
+    }
+
+    #chat p span {
+        font-weight: 700;
+        color: red;
+    }
+
+</style>
 
 <body>
 
-    <h1>Chat do Guia</h1>
-    <div id="chat">
+    <h1 class="display-2 text-center mt-5">Chat utilizando Socket.IO</h1>
+    <div class="container ">
+        <div id="chat">
 
+        </div>
+        <br>
+        <div class="userDiv">
+            <input type="text" class="form-control" id="username" placeholder="Seu nome de usuário"><br>
+            <input type="text" class="form-control" id="msg" placeholder="Digite sua mensagem">
+            <br>
+            <button class="btn btn-primary btn-lg w-100" onclick="enviar()">Enviar</button>
+        </div>
     </div>
-    <br>
-    <input type="text" name="" id="username" placeholder="Seu nome de usuário"><br>
-    <input type="text" id="msg" placeholder="Digite sua mensagem">
-    <br>
-    <button onclick="enviar()">Enviar</button>
 
     <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"
         integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
         crossorigin="anonymous"></script>
     <script>
         let socket = io()
+        let chat = document.getElementById('chat')
 
         socket.on("disconnect", () => {
             console.log("Desconectado")
         })
 
         socket.on("showMsg", data => {
-            let chat = document.getElementById('chat')
             let p = document.createElement('p')
-            p.innerHTML = `${data.username}:${data.msg}`
+            p.classList.add('lead')
+            let username = data.username
+            let msg = data.msg
+            p.innerHTML = `${username} : ${msg}`
             chat.appendChild(p)
         })
 
@@ -43,7 +68,11 @@
             let username = usernameField.value
             let msg = msgField.value
 
-            socket.emit('msg', { username, msg })
+            if(username == undefined || username == "" || msg == undefined || msg == "") {
+                return
+            } else {
+                socket.emit('msg', { username, msg })
+            }
         }
 
     </script>
