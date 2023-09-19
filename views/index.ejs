@@ -1,11 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat com socket</title>
+    <title>Socket IO</title>
 </head>
+
 <body>
-    
+
+    <h1>Chat do Guia</h1>
+    <div id="chat">
+
+    </div>
+    <br>
+    <input type="text" name="" id="username" placeholder="Seu nome de usuário"><br>
+    <input type="text" id="msg" placeholder="Digite sua mensagem">
+    <br>
+    <button onclick="enviar()">Enviar</button>
+
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"
+        integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
+        crossorigin="anonymous"></script>
+    <script>
+        let socket = io()
+
+        socket.on("disconnect", () => {
+            console.log("Desconectado")
+        })
+
+        let enviar = () => {
+            let usernameField = document.getElementById('username')
+            let msgField = document.getElementById('msg')
+
+            let username = usernameField.value
+            let msg = msgField.value
+
+            socket.emit('msg', { username, msg })
+        }
+
+    </script>
 </body>
+
 </html>

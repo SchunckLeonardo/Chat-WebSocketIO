@@ -5,15 +5,13 @@ let server = http.createServer(app)
 let io = require('socket.io')(server)
 
 io.on("connection", socket => {
-    console.log(socket.id)
-
     socket.on("disconnect", () => {
         console.log(`O usuário ${socket.id} foi desconectado`)
     })
 
-    socket.on('palavra', data => {
+    socket.on("msg", data => {
         console.log(data)
-        socket.emit("enviar", data + " Bom dia")
+        socket.emit("showMsg", data)
     })
 })
 
@@ -23,6 +21,6 @@ app.get('/', (req, res) => {
     res.render('index')
 })
 
-server.listen(3000, () => {
+server.listen(3030, () => {
     console.log('App rodando')
 })
